@@ -3,9 +3,9 @@
 -- Tham chiếu đến các đối tượng cần thiết
 local player = game.Players.LocalPlayer
 local gemCost = 100 -- Số gems tiêu hao cho mỗi lượt quay
-local rollInterval = 5 -- Khoảng thời gian giữa các lần quay (tính bằng giây)
-local banner = game.Workspace:WaitForChild("Banner") -- Thay đổi đường dẫn theo cách trò chơi của bạn
-local gems = player:WaitForChild("Gems") -- Thay đổi nếu gems được lưu ở vị trí khác
+local rollInterval = 10 -- Khoảng thời gian giữa các lần quay (tính bằng giây)
+local banner = game.Workspace:WaitForChild("Banner") -- Thay đổi đường dẫn đến banner nếu cần
+local gems = player:WaitForChild("Gems") -- Thay đổi đường dẫn đến số gems nếu cần
 
 -- Hàm để thực hiện quay
 local function rollForUnit()
@@ -14,19 +14,19 @@ local function rollForUnit()
         gems.Value = gems.Value - gemCost
 
         -- Thực hiện quay
-        local rollEvent = banner:FindFirstChild("RollEvent") -- Thay đổi tên và phương thức gọi quay nếu khác
+        local rollEvent = banner:FindFirstChild("RollEvent") -- Tên của sự kiện quay, thay đổi nếu khác
         if rollEvent then
-            rollEvent:FireServer() -- Gọi sự kiện để thực hiện quay
+            rollEvent:FireServer() -- Gọi sự kiện quay
         else
             warn("RollEvent not found in Banner")
             return
         end
 
         -- Chờ kết quả quay
-        wait(1) -- Thay đổi thời gian chờ nếu cần
+        wait(2) -- Thay đổi thời gian chờ nếu cần
 
         -- Kiểm tra kết quả quay
-        local result = player:FindFirstChild("RollResult") -- Thay đổi theo cách trò chơi cung cấp kết quả quay
+        local result = player:FindFirstChild("RollResult") -- Thay đổi nếu kết quả quay được lưu ở vị trí khác
         if result and result.Value == "Sung Jinwoo" then
             print("Received unit: Sung Jinwoo")
             -- Thực hiện hành động khi nhận được unit
