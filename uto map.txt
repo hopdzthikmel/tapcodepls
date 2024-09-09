@@ -1,0 +1,43 @@
+-- Script để tự động quay unit trong Anime Vanguards
+
+local gemCost = 100 -- Số gems tiêu hao cho mỗi lượt quay
+local rollInterval = 5 -- Khoảng thời gian giữa các lần quay (tính bằng giây)
+local targetUnitName = "Sung Jinwu" -- Tên unit bạn muốn nhận
+
+-- Tham chiếu đến các đối tượng cần thiết
+local player = game.Players.LocalPlayer
+local gemValue = player:WaitForChild("Gems") -- Thay đổi đường dẫn nếu cần
+local banner = game.Workspace:WaitForChild("Banner") -- Thay đổi đường dẫn đến banner
+local rollFunction = banner:WaitForChild("Roll") -- Thay đổi theo cách gọi quay của bạn
+local getRolledUnitFunction = banner:WaitForChild("GetRolledUnit") -- Hàm hoặc cách lấy kết quả quay
+
+-- Hàm để thực hiện quay
+local function rollForUnit()
+    if gemValue.Value >= gemCost then
+        -- Tiêu hao gems
+        gemValue.Value = gemValue.Value - gemCost
+
+        -- Thực hiện quay
+        rollFunction:Fire() -- Thay đổi tùy thuộc vào cách gọi hàm quay
+
+        -- Chờ kết quả quay
+        wait(1) -- Thay đổi thời gian chờ nếu cần
+
+        -- Kiểm tra kết quả
+        local rolledUnit = getRolledUnitFunction:Invoke() -- Thay đổi tùy thuộc vào cách lấy kết quả quay
+        if rolledUnit == targetUnitName then
+            print("Received unit:", targetUnitName)
+            -- Thực hiện hành động khi nhận được unit
+        else
+            print("Did not receive unit. Rolling again...")
+        end
+    else
+        print("Not enough gems.")
+    end
+end
+
+-- Vòng lặp chính để tự động quay
+while true do
+    rollForUnit()
+    wait(rollInterval)
+end
